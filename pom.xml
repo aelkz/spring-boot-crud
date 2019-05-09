@@ -11,11 +11,11 @@
 	</parent>
 
 	<groupId>com.aelkz.springboot.skeleton</groupId>
-	<artifactId>sample</artifactId>
+	<artifactId>spring-boot-crud</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>sample</name>
+	<name>spring-boot-crud</name>
 	<description>sample crud application</description>
 
 	<properties>

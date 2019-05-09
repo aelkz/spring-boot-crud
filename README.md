@@ -17,3 +17,7 @@
 @aelkz<br>
 raphael.alex@gmail.com<br>
 This project is based on https://github.com/pavelfomin/spring-boot-rest-example
+
+### CircleCI status
+
+[![CircleCI](https://circleci.com/gh/aelkz/spring-boot-crud/tree/master.svg?style=svg)](https://circleci.com/gh/aelkz/spring-boot-crud/tree/master)
