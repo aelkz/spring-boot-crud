@@ -1,0 +1,84 @@
+# Java Maven CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/openjdk:8-jdk
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+    working_directory: ~/$APP_NAME
+
+    steps:
+      # ================================================== #
+      # JOB: INTEGRAÇÃO CONTÍNUA
+      # ================================================== #
+
+      - checkout
+
+      - restore_cache:
+          keys:
+            - $APP_NAME-{{ checksum "pom.xml" }}
+
+      - run: mvn dependency:go-offline # gets the project dependencies
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: $APP_NAME-{{ checksum "pom.xml" }}
+
+      - run:
+          name: Running Tests
+          command: mvn test
+
+      - run:
+          name: Packaging Application (artifact creation)
+          command: mvn package -DskipTests=true
+
+      - store_test_results: # uploads the test metadata from the `target/surefire-reports` directory so that it can show up in the CircleCI dashboard.
+        # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
+          path: target/surefire-reports
+
+      - store_artifacts:
+          path: target/$APP_NAME-0.0.1-SNAPSHOT.jar
+
+  deploy:
+    docker:
+      # specify the version you desire here
+      - image: circleci/openjdk:8-jdk
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+    working_directory: ~/$APP_NAME
+
+    steps:
+      # ================================================== #
+      # JOB: ENTREGA CONTÍNUA
+      # ================================================== #
+
+      - run:
+          name: Deploying to heroku master branch
+          command: |
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
