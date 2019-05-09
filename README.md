@@ -15,4 +15,5 @@
 ### Author
 
 @aelkz<br>
-raphael.alex@gmail.com
+raphael.alex@gmail.com<br>
+This project is based on https://github.com/pavelfomin/spring-boot-rest-example
