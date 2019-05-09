@@ -25,14 +25,14 @@ jobs:
 
       - restore_cache:
           keys:
-            - $APP_NAME-{{ checksum "pom.xml" }}
+            - spring-boot-crud-{{ checksum "pom.xml" }}
 
       - run: mvn dependency:go-offline # gets the project dependencies
 
       - save_cache:
           paths:
             - ~/.m2
-          key: $APP_NAME-{{ checksum "pom.xml" }}
+          key: spring-boot-crud-{{ checksum "pom.xml" }}
 
       - run:
           name: Running Tests
